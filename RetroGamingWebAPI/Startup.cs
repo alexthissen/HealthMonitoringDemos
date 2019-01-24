@@ -13,6 +13,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using RetroGamingWebAPI.HealthChecks;
 
 namespace RetroGamingWebAPI
 {
@@ -30,22 +31,11 @@ namespace RetroGamingWebAPI
         {
             services
                 .AddHealthChecks()
-                .AddCheck("sql", () =>
-                {
-                    using (var connection = new SqlConnection(Configuration.GetConnectionString("Test")))
-                    {
-                        try
-                        {
-                            connection.Open();
-                        }
-                        catch (SqlException)
-                        {
-                            return HealthCheckResult.Unhealthy();
-                        }
-                    }
+                .AddCheck<SqlServerHealthCheck>("sql");
 
-                    return HealthCheckResult.Healthy();
-                });
+            services.AddSingleton<SqlServerHealthCheck>(new SqlServerHealthCheck(
+                new SqlConnection(Configuration.GetConnectionString("Test"))));
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 
@@ -62,7 +52,11 @@ namespace RetroGamingWebAPI
                 app.UseHsts();
             }
 
-            app.UseHealthChecks("/health", new HealthCheckOptions() { AllowCachingResponses = true });
+            HealthCheckOptions options = new HealthCheckOptions();
+            options.ResultStatusCodes[HealthStatus.Unhealthy] = 418;
+            options.AllowCachingResponses = true;
+
+            app.UseHealthChecks("/health", options);
             app.UseHttpsRedirection();
             app.UseMvc();
         }
