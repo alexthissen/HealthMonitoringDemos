@@ -31,7 +31,8 @@ namespace RetroGamingWebAPI
         {
             services
                 .AddHealthChecks()
-                .AddCheck<SqlServerHealthCheck>("sql");
+                .AddCheck<SqlServerHealthCheck>("sql")
+                .AddApplicationInsightsPublisher(Configuration["InstrumentationKey"]);
 
             services.AddSingleton<SqlServerHealthCheck>(new SqlServerHealthCheck(
                 new SqlConnection(Configuration.GetConnectionString("Test"))));
