@@ -5,14 +5,21 @@
     <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <UserSecretsId>9f7d9a51-98b2-4bea-aeb9-ec214556431e</UserSecretsId>
+    <ApplicationInsightsResourceId>/subscriptions/ad184f13-1651-4b33-98bc-35ee7e41deec/resourcegroups/Default-ApplicationInsights-EastUS/providers/microsoft.insights/components/RetroGamingWebAPI</ApplicationInsightsResourceId>
+    <ApplicationInsightsAnnotationResourceId>/subscriptions/ad184f13-1651-4b33-98bc-35ee7e41deec/resourcegroups/Default-ApplicationInsights-EastUS/providers/microsoft.insights/components/RetroGamingWebAPI</ApplicationInsightsAnnotationResourceId>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="AspNetCore.HealthChecks.OpenIdConnectServer" Version="2.2.2" />
     <PackageReference Include="AspNetcore.HealthChecks.Publisher.ApplicationInsights" Version="2.2.1" />
+    <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.5.1" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
-    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.0.2105168" />
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.1.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services" />
   </ItemGroup>
 
 </Project>

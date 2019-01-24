@@ -29,10 +29,13 @@ namespace RetroGamingWebAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            string key = Configuration["ApplicationInsights:InstrumentationKey"];
             services
                 .AddHealthChecks()
-                .AddCheck<SqlServerHealthCheck>("sql")
-                .AddApplicationInsightsPublisher(Configuration["InstrumentationKey"]);
+                .AddApplicationInsightsPublisher(key)
+                .AddCheck<RandomHealthCheck>("random", failureStatus: HealthStatus.Degraded);
+               // .AddCheck<SqlServerHealthCheck>("sql");
+
 
             services.AddSingleton<SqlServerHealthCheck>(new SqlServerHealthCheck(
                 new SqlConnection(Configuration.GetConnectionString("Test"))));
