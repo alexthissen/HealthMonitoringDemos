@@ -1,0 +1,40 @@
+version: '3.4'
+
+services:
+  retrogamingwebapi:
+    image: ${DOCKER_REGISTRY-}retrogamingwebapi
+    build:
+      context: .
+      dockerfile: RetroGamingWebAPI/Dockerfile
+
+  prometheus:
+    image: prom/prometheus
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+    ports:
+      - '9090:9090'
+
+  pushgateway:
+    image: prom/pushgateway
+    container_name: pushgateway
+    restart: unless-stopped
+    ports:
+      - '9091:9091'
+    labels:
+      org.label-schema.group: "monitoring"
+
+  node-exporter:
+    image: prom/node-exporter
+    ports:
+      - '9100:9100'
+
+  grafana:
+    image: grafana/grafana
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=pass
+    depends_on:
+      - prometheus
+    ports:
+      - "3000:3000"
