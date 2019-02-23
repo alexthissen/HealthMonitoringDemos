@@ -1,15 +1,16 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.271
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28527.54
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RetroGamingWebAPI", "RetroGamingWebAPI\RetroGamingWebAPI.csproj", "{13FA4F96-2DFB-4224-9E97-DE59D51BAFB0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RetroGamingWebAPI", "RetroGamingWebAPI\RetroGamingWebAPI.csproj", "{13FA4F96-2DFB-4224-9E97-DE59D51BAFB0}"
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{3C23DAD3-3882-421A-BA5E-A6A16BA9070D}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{E6A9F0C0-CEFE-4511-A4AB-22B575CC7F49}"
 	ProjectSection(SolutionItems) = preProject
 		prometheus.yml = prometheus.yml
+		RetroGaming-k8s.yaml = RetroGaming-k8s.yaml
 	EndProjectSection
 EndProject
 Global

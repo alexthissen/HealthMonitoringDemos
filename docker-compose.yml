@@ -6,7 +6,17 @@ services:
     build:
       context: .
       dockerfile: RetroGamingWebAPI/Dockerfile
+    environment:
+      - HEALTH_INITIAL_STATE=Degraded
 
+  healthcheckui:
+    image: xabarilcoding/healthchecksui:latest
+    environment:
+      - HealthChecks-UI:HealthChecks:0:Name=httpBasic
+      - HealthChecks-UI:HealthChecks:0:Uri=http://retrogamingwebapi/health
+    ports:
+      - 5000:80
+  
   prometheus:
     image: prom/prometheus
     volumes:
@@ -14,27 +24,31 @@ services:
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
     ports:
-      - '9090:9090'
+      - 9090:9090
 
   pushgateway:
     image: prom/pushgateway
     container_name: pushgateway
     restart: unless-stopped
     ports:
-      - '9091:9091'
+      - 9091:9091
     labels:
       org.label-schema.group: "monitoring"
 
   node-exporter:
     image: prom/node-exporter
     ports:
-      - '9100:9100'
+      - 9100:9100
 
   grafana:
     image: grafana/grafana
     environment:
       - GF_SECURITY_ADMIN_PASSWORD=pass
+      - GF_SMTP_HOST=localhost:25
+      - GF_SMTP_ENABLED=true
+      - GF_SMTP_FROM_ADDRESS=alert@retrogamingwebapi.com
+      - GF_SMTP_SKIP_VERIFY=true
     depends_on:
       - prometheus
     ports:
-      - "3000:3000"
+      - 3000:3000

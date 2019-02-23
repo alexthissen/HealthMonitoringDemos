@@ -1,0 +1,78 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: monitoringdemo
+  labels:
+    version: dev
+    product: RetroGaming
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: monitoringdemo
+  name: svc-retrogamingwebapi
+  labels:
+    version: dev
+    product: RetroGaming
+spec:
+  selector:
+    app: retrogamingwebapi
+  type: NodePort
+  ports:
+  - port: 80
+    targetPort: 80
+    protocol: TCP
+    name: http
+  - port: 443
+    targetPort: 443
+    protocol: TCP
+    name: https
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  namespace: monitoringdemo
+  name: dep-retrogamingwebapi
+spec:
+  replicas: 3
+  revisionHistoryLimit: 0
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 2        # how many pods we can add at a time
+      maxUnavailable: 0  # maxUnavailable define how many pods can be unavailable during the rolling update
+  template:
+    metadata:
+      labels:
+        app: retrogamingwebapi
+    spec:
+      containers:
+      - name: retrogamingwebapi
+        terminationMessagePath: "/tmp/retrogamingwebapi-log"
+        image: retrogamingwebapi:latest
+        imagePullPolicy: Never
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 80
+          initialDelaySeconds: 20
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 80
+          initialDelaySeconds: 20
+          periodSeconds: 10
+        env:
+        - name: ASPNETCORE_ENVIRONMENT
+          value: Production
+        - name: ASPNETCORE_URLS
+          value: http://0.0.0.0:80
+        - name: HEALTH_INITIAL_STATE
+          value: healthy
+        ports:
+        - containerPort: 80
+        - containerPort: 443
+        resources:
+          limits:
+            cpu: "0.10"

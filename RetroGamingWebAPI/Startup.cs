@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Builder;
@@ -37,11 +38,17 @@ namespace RetroGamingWebAPI
                 .AddHealthChecks()
                 .AddApplicationInsightsPublisher(key)
                 .AddPrometheusGatewayPublisher("http://pushgateway:9091/metrics", "pushgateway")
-                .AddCheck<RandomHealthCheck>("random", failureStatus: HealthStatus.Degraded);
-               // .AddCheck<SqlServerHealthCheck>("sql");
+                .AddCheck<ForcedHealthCheck>("forced")
+                .AddCheck<TripwireHealthCheck>("tripwire");
 
-            services.AddSingleton<SqlServerHealthCheck>(new SqlServerHealthCheck(
+            //.AddCheck<RandomHealthCheck>("random", failureStatus: HealthStatus.Degraded);
+            //.AddCheck<RandomHealthCheck>("random", failureStatus: HealthStatus.Degraded);
+            //.AddCheck<SqlServerHealthCheck>("sql");
+
+            services.AddSingleton(new SqlServerHealthCheck(
                 new SqlConnection(Configuration.GetConnectionString("Test"))));
+            services.AddSingleton(new TripwireHealthCheck());
+            services.AddSingleton(new ForcedHealthCheck(Configuration["HEALTH_INITIAL_STATE"]));
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
@@ -60,7 +67,7 @@ namespace RetroGamingWebAPI
             }
 
             HealthCheckOptions options = new HealthCheckOptions();
-            options.ResultStatusCodes[HealthStatus.Unhealthy] = 418;
+            options.ResultStatusCodes[HealthStatus.Degraded] = 418; // I'm a tea pot (or other HttpStatusCode enum)
             options.AllowCachingResponses = true;
             options.Predicate = _ => true;
             options.ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse;

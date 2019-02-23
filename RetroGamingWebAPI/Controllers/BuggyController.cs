@@ -3,13 +3,23 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using RetroGamingWebAPI.HealthChecks;
 
 namespace RetroGamingWebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ValuesController : ControllerBase
+    public class BuggyController : ControllerBase
     {
+        private readonly TripwireHealthCheck healthCheck;
+        private readonly ForcedHealthCheck forcedHealthCheck;
+
+        public BuggyController(TripwireHealthCheck tripWireHealthCheck, ForcedHealthCheck forcedHealthCheck)
+        {
+            this.healthCheck = tripWireHealthCheck;
+            this.forcedHealthCheck = forcedHealthCheck;
+        }
+
         // GET api/values
         [HttpGet]
         public ActionResult<IEnumerable<string>> Get()
@@ -19,15 +29,16 @@ namespace RetroGamingWebAPI.Controllers
 
         // GET api/values/5
         [HttpGet("{id}")]
-        public ActionResult<string> Get(int id)
+        public ActionResult<int> Get(int id)
         {
-            return "value";
+            return healthCheck.Trip();
         }
 
         // POST api/values
         [HttpPost]
-        public void Post([FromBody] string value)
+        public void Post([FromQuery] string status)
         {
+            forcedHealthCheck.Force(status, Environment.MachineName);
         }
 
         // PUT api/values/5
