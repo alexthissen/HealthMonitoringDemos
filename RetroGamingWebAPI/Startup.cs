@@ -38,8 +38,11 @@ namespace RetroGamingWebAPI
                 .AddHealthChecks()
                 .AddApplicationInsightsPublisher(key)
                 .AddPrometheusGatewayPublisher("http://pushgateway:9091/metrics", "pushgateway")
+                .AddAsyncCheck("random", async () => await Task.FromResult(new Random().Next(1000) > 500 ? HealthCheckResult.Healthy() : HealthCheckResult.Unhealthy()))
                 .AddCheck<ForcedHealthCheck>("forced")
                 .AddCheck<TripwireHealthCheck>("tripwire");
+
+            //services.Configure<HealthCheckPublisherOptions>(options => options.Configuration);
 
             //.AddCheck<RandomHealthCheck>("random", failureStatus: HealthStatus.Degraded);
             //.AddCheck<RandomHealthCheck>("random", failureStatus: HealthStatus.Degraded);
@@ -70,6 +73,7 @@ namespace RetroGamingWebAPI
             options.ResultStatusCodes[HealthStatus.Degraded] = 418; // I'm a tea pot (or other HttpStatusCode enum)
             options.AllowCachingResponses = true;
             options.Predicate = _ => true;
+            //options.Predicate = reg => reg.
             options.ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse;
 
             app.UseHealthChecks("/health", options);
