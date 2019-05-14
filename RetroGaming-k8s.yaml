@@ -39,8 +39,8 @@ spec:
   strategy:
     type: RollingUpdate
     rollingUpdate:
-      maxSurge: 2        # how many pods we can add at a time
-      maxUnavailable: 0  # maxUnavailable define how many pods can be unavailable during the rolling update
+      maxSurge: 2          # how many pods we can add at a time
+      maxUnavailable: 0    # maxUnavailable defines how many pods can be unavailable during the rolling update
   template:
     metadata:
       labels:
@@ -51,15 +51,15 @@ spec:
         terminationMessagePath: "/tmp/retrogamingwebapi-log"
         image: retrogamingwebapi:latest
         imagePullPolicy: Never
-        livenessProbe:
+        readinessProbe:
           httpGet:
-            path: /health
+            path: /health/ready
             port: 80
           initialDelaySeconds: 20
           periodSeconds: 10
-        readinessProbe:
+        livenessProbe:
           httpGet:
-            path: /health
+            path: /health/lively
             port: 80
           initialDelaySeconds: 20
           periodSeconds: 10
@@ -69,7 +69,7 @@ spec:
         - name: ASPNETCORE_URLS
           value: http://0.0.0.0:80
         - name: HEALTH_INITIAL_STATE
-          value: healthy
+          value: unhealthy
         ports:
         - containerPort: 80
         - containerPort: 443

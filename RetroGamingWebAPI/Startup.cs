@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Threading.Tasks;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Builder;
@@ -15,6 +16,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Polly;
+using Polly.CircuitBreaker;
+using Polly.Registry;
 using RetroGamingWebAPI.HealthChecks;
 
 namespace RetroGamingWebAPI
@@ -33,14 +37,28 @@ namespace RetroGamingWebAPI
         {
             string key = Configuration["ApplicationInsights:InstrumentationKey"];
 
+            CircuitBreakerPolicy breaker = Policy
+                .Handle<HttpRequestException>()
+                .CircuitBreaker(
+                    exceptionsAllowedBeforeBreaking: 2,
+                    durationOfBreak: TimeSpan.FromMinutes(1)
+            );
+            PolicyRegistry registry = new PolicyRegistry() {
+                { "DefaultBreaker", breaker }
+            };
+
             //services.AddHealthChecksUI();
             services
                 .AddHealthChecks()
                 .AddApplicationInsightsPublisher(key)
                 .AddPrometheusGatewayPublisher("http://pushgateway:9091/metrics", "pushgateway")
-                .AddAsyncCheck("random", async () => await Task.FromResult(new Random().Next(1000) > 500 ? HealthCheckResult.Healthy() : HealthCheckResult.Unhealthy()))
-                .AddCheck<ForcedHealthCheck>("forced")
-                .AddCheck<TripwireHealthCheck>("tripwire");
+                //.AddCheck<CircuitBreakerHealthCheck>("circuitbreakers", tags: new string[] { "ready" });
+            //                .AddAsyncCheck("random", async () => await Task.FromResult(new Random().Next(1000) > 500 ? HealthCheckResult.Healthy() : HealthCheckResult.Unhealthy()))
+            //                .AddCheck<ForcedHealthCheck>("forced")
+                            .AddCheck<TripwireHealthCheck>("tripwire");
+
+            services.Configure<CircuitBreakerHealthCheckOptions>(Configuration.GetSection("CircuitBreakerHealthCheckOptions"));
+            services.AddSingleton<IReadOnlyPolicyRegistry<string>>(registry);
 
             //services.Configure<HealthCheckPublisherOptions>(options => options.Configuration);
 
@@ -73,7 +91,7 @@ namespace RetroGamingWebAPI
             options.ResultStatusCodes[HealthStatus.Degraded] = 418; // I'm a tea pot (or other HttpStatusCode enum)
             options.AllowCachingResponses = true;
             options.Predicate = _ => true;
-            //options.Predicate = reg => reg.
+            //options.Predicate = reg => reg.Tags.Contains("ready");
             options.ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse;
 
             app.UseHealthChecks("/health", options);

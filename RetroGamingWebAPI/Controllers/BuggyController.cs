@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Polly;
+using Polly.CircuitBreaker;
+using Polly.Registry;
 using RetroGamingWebAPI.HealthChecks;
 
 namespace RetroGamingWebAPI.Controllers
@@ -11,11 +14,15 @@ namespace RetroGamingWebAPI.Controllers
     [ApiController]
     public class BuggyController : ControllerBase
     {
+        private readonly IReadOnlyPolicyRegistry<string> registry;
         private readonly TripwireHealthCheck healthCheck;
         private readonly ForcedHealthCheck forcedHealthCheck;
 
-        public BuggyController(TripwireHealthCheck tripWireHealthCheck, ForcedHealthCheck forcedHealthCheck)
+        public BuggyController(
+            IReadOnlyPolicyRegistry<string> registry,
+            TripwireHealthCheck tripWireHealthCheck, ForcedHealthCheck forcedHealthCheck)
         {
+            this.registry = registry;
             this.healthCheck = tripWireHealthCheck;
             this.forcedHealthCheck = forcedHealthCheck;
         }
@@ -24,6 +31,8 @@ namespace RetroGamingWebAPI.Controllers
         [HttpGet]
         public ActionResult<IEnumerable<string>> Get()
         {
+            CircuitBreakerPolicy breaker = registry.Get<CircuitBreakerPolicy>("DefaultBreaker");
+            breaker.Isolate();
             return new string[] { "value1", "value2" };
         }
 
