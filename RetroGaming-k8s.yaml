@@ -54,15 +54,20 @@ spec:
         readinessProbe:
           httpGet:
             path: /health/ready
-            port: 80
+            port: 8080
           initialDelaySeconds: 20
           periodSeconds: 10
+          timeoutSeconds: 10
+          failureThreshold: 3
+
         livenessProbe:
           httpGet:
             path: /health/lively
-            port: 80
-          initialDelaySeconds: 20
+            port: 8080
+          initialDelaySeconds: 2
           periodSeconds: 10
+          timeoutSeconds: 10
+          failureThreshold: 3
         env:
         - name: ASPNETCORE_ENVIRONMENT
           value: Production

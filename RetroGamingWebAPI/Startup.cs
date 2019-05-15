@@ -54,22 +54,26 @@ namespace RetroGamingWebAPI
                 .AddPrometheusGatewayPublisher("http://pushgateway:9091/metrics", "pushgateway")
                 //.AddCheck<CircuitBreakerHealthCheck>("circuitbreakers", tags: new string[] { "ready" });
             //                .AddAsyncCheck("random", async () => await Task.FromResult(new Random().Next(1000) > 500 ? HealthCheckResult.Healthy() : HealthCheckResult.Unhealthy()))
-            //                .AddCheck<ForcedHealthCheck>("forced")
-                            .AddCheck<TripwireHealthCheck>("tripwire");
+                //.AddCheck<ForcedHealthCheck>("forceable")
+                .AddCheck<TripwireHealthCheck>("tripwire", failureStatus: HealthStatus.Degraded);
 
             services.Configure<CircuitBreakerHealthCheckOptions>(Configuration.GetSection("CircuitBreakerHealthCheckOptions"));
             services.AddSingleton<IReadOnlyPolicyRegistry<string>>(registry);
 
-            //services.Configure<HealthCheckPublisherOptions>(options => options.Configuration);
+            services.Configure<HealthCheckPublisherOptions>(options => {
+                options.Delay = TimeSpan.FromSeconds(20);
+                });
 
-            //.AddCheck<RandomHealthCheck>("random", failureStatus: HealthStatus.Degraded);
-            //.AddCheck<RandomHealthCheck>("random", failureStatus: HealthStatus.Degraded);
-            //.AddCheck<SqlServerHealthCheck>("sql");
-
-            services.AddSingleton(new SqlServerHealthCheck(
-                new SqlConnection(Configuration.GetConnectionString("Test"))));
-            services.AddSingleton(new TripwireHealthCheck());
+            // Registering health check lifetimes. Singleton is preferred
+            services.AddSingleton<TripwireHealthCheck>();
             services.AddSingleton(new ForcedHealthCheck(Configuration["HEALTH_INITIAL_STATE"]));
+
+            services.AddSingleton<IHealthCheck>(new SqlConnectionHealthCheck(
+                new SqlConnection(Configuration.GetConnectionString("Test"))));
+
+            // Register dependencies of health checks
+            services.AddSingleton<IRandomHealthCheckResultGenerator, TimeBasedRandomHealthCheckResultGenerator>();
+            services.AddSingleton<IHealthCheck, RandomHealthCheck>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
@@ -81,26 +85,43 @@ namespace RetroGamingWebAPI
             {
                 app.UseDeveloperExceptionPage();
             }
-            else
-            {
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-                app.UseHsts();
-            }
 
             HealthCheckOptions options = new HealthCheckOptions();
             options.ResultStatusCodes[HealthStatus.Degraded] = 418; // I'm a tea pot (or other HttpStatusCode enum)
             options.AllowCachingResponses = true;
             options.Predicate = _ => true;
-            //options.Predicate = reg => reg.Tags.Contains("ready");
             options.ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse;
 
             app.UseHealthChecks("/health", options);
-            //app.UseHealthChecksUI();
-            //app.UseHealthChecksUI(setup =>
-            //{
-            //    setup.UIPath = "/show-health-ui"; // this is ui path in your browser
-            //    setup.ApiPath = "/health-ui-api"; // the UI ( spa app )  use this path to get information from the store ( this is NOT the healthz path, is internal ui api )
-            //});
+            app.UseHealthChecks("/ping", new HealthCheckOptions() { Predicate = _ => false });
+
+            app.UseHealthChecksUI();
+            app.UseHealthChecksUI(setup =>
+            {
+                setup.UIPath = "/show-health-ui"; // this is ui path in your browser
+                setup.ApiPath = "/health-ui-api"; // the UI ( spa app )  use this path to get information from the store ( this is NOT the healthz path, is internal ui api )
+            });
+            app.UseHttpsRedirection();
+
+            app.UseWhen(
+                ctx => ctx.User.Identity.IsAuthenticated,
+                a => a.UseHealthChecks("/securehealth", new HealthCheckOptions() { Predicate = _ => false })
+            );
+            app.UseMvc();
+        }
+
+        public void ConfigureProduction(IApplicationBuilder app, IHostingEnvironment env)
+        {
+            app.UseHealthChecks("/health/ready", 8080, 
+                new HealthCheckOptions() {
+                    Predicate = reg => reg.Tags.Contains("ready")
+            });
+            app.UseHealthChecks("/health/lively", 8080,
+                new HealthCheckOptions()
+                {
+                    Predicate = _ => true
+                });
+
             app.UseHttpsRedirection();
             app.UseMvc();
         }

@@ -8,13 +8,13 @@ using System.Threading.Tasks;
 
 namespace RetroGamingWebAPI.HealthChecks
 {
-    public class SqlServerHealthCheck : IHealthCheck
+    public class SqlConnectionHealthCheck : IHealthCheck
     {
         SqlConnection connection;
 
         public string Name => "sql";
 
-        public SqlServerHealthCheck(SqlConnection connection)
+        public SqlConnectionHealthCheck(SqlConnection connection)
         {
             this.connection = connection;
         }
