@@ -52,6 +52,10 @@ services:
       - GF_SMTP_ENABLED=true
       - GF_SMTP_FROM_ADDRESS=alert@retrogamingwebapi.com
       - GF_SMTP_SKIP_VERIFY=true
+      - GF_EXTERNAL_IMAGE_STORAGE_PROVIDER=azure_blob
+      - GF_EXTERNAL_IMAGE_STORAGE_AZURE_BLOB_ACCOUNT_NAME=grafanaslacknotification
+      - GF_EXTERNAL_IMAGE_STORAGE_AZURE_BLOB_ACCOUNT_KEY=yourkey
+      - GF_EXTERNAL_IMAGE_STORAGE_AZURE_BLOB_CONTAINER_NAME=alerts
     depends_on:
       - prometheus
     ports:
