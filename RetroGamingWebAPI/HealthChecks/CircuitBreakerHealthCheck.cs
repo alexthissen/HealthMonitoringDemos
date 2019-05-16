@@ -27,7 +27,7 @@ namespace RetroGamingWebAPI.HealthChecks
             this.registry = registry;
         }
 
-        public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default(CancellationToken))
+        public Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default(CancellationToken))
         {
             CircuitBreakerPolicy policy;
             HealthCheckResult result = HealthCheckResult.Healthy();
@@ -37,11 +37,11 @@ namespace RetroGamingWebAPI.HealthChecks
                 {
                     if (policy.CircuitState == CircuitState.Isolated || policy.CircuitState == CircuitState.HalfOpen)
                     {
-                        result = HealthCheckResult.Degraded();
+                        result = HealthCheckResult.Degraded(description: "Too many circuit breakers are (half)open.");
                     }
                 }
             }
-            return result;
+            return Task.FromResult(result);
         }
     }
 }

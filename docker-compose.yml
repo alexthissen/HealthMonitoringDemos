@@ -6,8 +6,6 @@ services:
     build:
       context: .
       dockerfile: RetroGamingWebAPI/Dockerfile
-    environment:
-      - HEALTH_INITIAL_STATE=Degraded
 
   healthcheckui:
     image: xabarilcoding/healthchecksui:latest
@@ -54,7 +52,7 @@ services:
       - GF_SMTP_SKIP_VERIFY=true
       - GF_EXTERNAL_IMAGE_STORAGE_PROVIDER=azure_blob
       - GF_EXTERNAL_IMAGE_STORAGE_AZURE_BLOB_ACCOUNT_NAME=grafanaslacknotification
-      - GF_EXTERNAL_IMAGE_STORAGE_AZURE_BLOB_ACCOUNT_KEY=yourkey
+      - GF_EXTERNAL_IMAGE_STORAGE_AZURE_BLOB_ACCOUNT_KEY=1E9bY25cXSPts2dB39r4DsUAwrPjundpZUuNJu0vx9rUDJ/HIZaAPSEKGhCyBowAK0hJO1BOtGFGqcuSr2TVcA==
       - GF_EXTERNAL_IMAGE_STORAGE_AZURE_BLOB_CONTAINER_NAME=alerts
     depends_on:
       - prometheus

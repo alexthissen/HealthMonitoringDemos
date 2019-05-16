@@ -32,10 +32,6 @@ namespace RetroGamingWebAPI.Controllers
         [HttpGet]
         public ActionResult<IEnumerable<string>> Get()
         {
-            // For demo purposes, a GET will trip circuit breaker
-            CircuitBreakerPolicy breaker = registry.Get<CircuitBreakerPolicy>("DefaultBreaker");
-            breaker.Isolate();
-
             return new string[] { "value1", "value2" };
         }
 
@@ -43,6 +39,11 @@ namespace RetroGamingWebAPI.Controllers
         [HttpGet("{id}")]
         public ActionResult<int> Get(int id)
         {
+            // For demo purposes, a GET will trip circuit breaker
+            CircuitBreakerPolicy breaker = registry.Get<CircuitBreakerPolicy>("DefaultBreaker");
+            breaker.Isolate();
+
+            // And trip another health check. Very buggy GET method :)
             return healthCheck.Trip();
         }
 
