@@ -54,17 +54,17 @@ spec:
         readinessProbe:
           httpGet:
             path: /health/ready
-            port: 8080
-          initialDelaySeconds: 20
+            port: 80
+          initialDelaySeconds: 5
           periodSeconds: 10
-          timeoutSeconds: 10
-          failureThreshold: 3
+          timeoutSeconds: 20
+          failureThreshold: 5
 
         livenessProbe:
           httpGet:
             path: /health/lively
-            port: 8080
-          initialDelaySeconds: 2
+            port: 80
+          initialDelaySeconds: 60
           periodSeconds: 10
           timeoutSeconds: 10
           failureThreshold: 3
@@ -74,7 +74,7 @@ spec:
         - name: ASPNETCORE_URLS
           value: http://0.0.0.0:80
         - name: HEALTH_INITIAL_STATE
-          value: unhealthy
+          value: healthy
         ports:
         - containerPort: 80
         - containerPort: 443

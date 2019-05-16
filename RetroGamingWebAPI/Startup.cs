@@ -97,6 +97,17 @@ namespace RetroGamingWebAPI
             options.ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse;
             app.UseHealthChecks("/health", options);
 
+            app.UseHealthChecks("/health/ready", 
+                new HealthCheckOptions()
+                {
+                    Predicate = reg => reg.Tags.Contains("ready")
+                });
+            app.UseHealthChecks("/health/lively", 
+                new HealthCheckOptions()
+                {
+                    Predicate = _ => true
+                });
+
             app.UseHealthChecksUI();
             //app.UseHealthChecksUI(setup =>
             //{
@@ -112,21 +123,21 @@ namespace RetroGamingWebAPI
             app.UseMvc();
         }
 
-        public void ConfigureProduction(IApplicationBuilder app, IHostingEnvironment env)
-        {
-            app.UseHealthChecks("/health/ready", 8080,
-                new HealthCheckOptions()
-                {
-                    Predicate = reg => reg.Tags.Contains("ready")
-                });
-            app.UseHealthChecks("/health/lively", 8080,
-                new HealthCheckOptions()
-                {
-                    Predicate = _ => true
-                });
+        //public void ConfigureProduction(IApplicationBuilder app, IHostingEnvironment env)
+        //{
+        //    app.UseHealthChecks("/health/ready", 8080,
+        //        new HealthCheckOptions()
+        //        {
+        //            Predicate = reg => reg.Tags.Contains("ready")
+        //        });
+        //    app.UseHealthChecks("/health/lively", 8080,
+        //        new HealthCheckOptions()
+        //        {
+        //            Predicate = _ => true
+        //        });
 
-            app.UseHttpsRedirection();
-            app.UseMvc();
-        }
+        //    app.UseHttpsRedirection();
+        //    app.UseMvc();
+        //}
     }
 }
