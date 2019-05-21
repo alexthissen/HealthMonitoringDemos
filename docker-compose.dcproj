@@ -5,7 +5,7 @@
     <DockerTargetOS>Linux</DockerTargetOS>
     <ProjectGuid>3c23dad3-3882-421a-ba5e-a6a16ba9070d</ProjectGuid>
     <DockerLaunchAction>LaunchBrowser</DockerLaunchAction>
-    <DockerServiceUrl>{Scheme}://localhost:{ServicePort}/api/buggy</DockerServiceUrl>
+    <DockerServiceUrl>http://localhost:59200/api/buggy</DockerServiceUrl>
     <DockerServiceName>retrogamingwebapi</DockerServiceName>
   </PropertyGroup>
   <ItemGroup>

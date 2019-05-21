@@ -68,12 +68,12 @@ namespace RetroGamingWebAPI
             services.AddSingleton(new ForcedHealthCheck(Configuration["HEALTH_INITIAL_STATE"]));
 
             services.AddSingleton<SlowDependencyHealthCheck>();
-            services.AddSingleton<IHealthCheck>(new SqlConnectionHealthCheck(
+            services.AddSingleton(new SqlConnectionHealthCheck(
                 new SqlConnection(Configuration.GetConnectionString("Test"))));
 
             // Register dependencies of health checks
             services.AddSingleton<IRandomHealthCheckResultGenerator, TimeBasedRandomHealthCheckResultGenerator>();
-            services.AddSingleton<IHealthCheck, RandomHealthCheck>();
+            services.AddSingleton<RandomHealthCheck>();
 
             services.AddHealthChecksUI();
 
@@ -112,12 +112,14 @@ namespace RetroGamingWebAPI
             app.UseHealthChecks("/health/ready", 80,
                 new HealthCheckOptions()
                 {
-                    Predicate = reg => reg.Tags.Contains("ready")
+                    Predicate = reg => reg.Tags.Contains("ready"),
+                    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
                 });
             app.UseHealthChecks("/health/lively", 80,
                 new HealthCheckOptions()
                 {
-                    Predicate = _ => true
+                    Predicate = _ => true,
+                    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
                 });
 
             //app.UseHttpsRedirection();
