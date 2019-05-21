@@ -79,7 +79,7 @@ namespace RetroGamingWebAPI
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
-
+        
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
@@ -97,17 +97,6 @@ namespace RetroGamingWebAPI
             options.ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse;
             app.UseHealthChecks("/health", options);
 
-            app.UseHealthChecks("/health/ready", 
-                new HealthCheckOptions()
-                {
-                    Predicate = reg => reg.Tags.Contains("ready")
-                });
-            app.UseHealthChecks("/health/lively", 
-                new HealthCheckOptions()
-                {
-                    Predicate = _ => true
-                });
-
             app.UseHealthChecksUI();
             //app.UseHealthChecksUI(setup =>
             //{
@@ -115,29 +104,28 @@ namespace RetroGamingWebAPI
             //    setup.ApiPath = "/health-ui-api"; // the UI ( spa app )  use this path to get information from the store ( this is NOT the healthz path, is internal ui api )
             //});
             app.UseHttpsRedirection();
+            app.UseMvc();
+        }
 
+        public void ConfigureProduction(IApplicationBuilder app, IHostingEnvironment env)
+        {
+            app.UseHealthChecks("/health/ready", 80,
+                new HealthCheckOptions()
+                {
+                    Predicate = reg => reg.Tags.Contains("ready")
+                });
+            app.UseHealthChecks("/health/lively", 80,
+                new HealthCheckOptions()
+                {
+                    Predicate = _ => true
+                });
+
+            //app.UseHttpsRedirection();
             app.UseWhen(
                 ctx => ctx.User.Identity.IsAuthenticated,
                 a => a.UseHealthChecks("/securehealth", new HealthCheckOptions() { Predicate = _ => false })
             );
             app.UseMvc();
         }
-
-        //public void ConfigureProduction(IApplicationBuilder app, IHostingEnvironment env)
-        //{
-        //    app.UseHealthChecks("/health/ready", 8080,
-        //        new HealthCheckOptions()
-        //        {
-        //            Predicate = reg => reg.Tags.Contains("ready")
-        //        });
-        //    app.UseHealthChecks("/health/lively", 8080,
-        //        new HealthCheckOptions()
-        //        {
-        //            Predicate = _ => true
-        //        });
-
-        //    app.UseHttpsRedirection();
-        //    app.UseMvc();
-        //}
     }
 }

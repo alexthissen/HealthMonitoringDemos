@@ -18,11 +18,14 @@ namespace RetroGamingWebAPI
             CreateWebHostBuilder(args).Build().Run();
         }
 
-        public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
-            WebHost.CreateDefaultBuilder(args)
+        public static IWebHostBuilder CreateWebHostBuilder(string[] args)
+        {
+            Assembly startupAssembly = typeof(Startup).GetTypeInfo().Assembly;
+            return WebHost.CreateDefaultBuilder(args)
                 .UseApplicationInsights()
-                .UseStartup<Startup>();
-                //.UseStartup(typeof(Startup).GetTypeInfo().Assembly.FullName);
-                //.UseSetting(WebHostDefaults.ApplicationKey, typeof(Program).GetTypeInfo().Assembly.FullName);
+                //.UseStartup<Startup>()
+                .UseStartup(startupAssembly.GetName().Name);
+                
+        }
     }
 }

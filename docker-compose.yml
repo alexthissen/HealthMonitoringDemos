@@ -10,7 +10,7 @@ services:
   healthcheckui:
     image: xabarilcoding/healthchecksui:latest
     environment:
-      - HealthChecks-UI:HealthChecks:0:Name=DefaultChecks
+      - HealthChecks-UI:HealthChecks:0:Name=DemoChecks
       - HealthChecks-UI:HealthChecks:0:Uri=http://retrogamingwebapi/health
     ports:
       - 5000:80
