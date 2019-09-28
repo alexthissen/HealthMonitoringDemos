@@ -79,6 +79,7 @@ namespace RetroGamingWebAPI
             services.AddHealthChecksUI();
 
             services.AddMvc()
+                .AddNewtonsoftJson()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
         }
         
