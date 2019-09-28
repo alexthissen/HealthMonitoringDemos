@@ -18,7 +18,8 @@
       "launchBrowser": true,
       "launchUrl": "api/buggy",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "ASPNETCORE_MANAGEMENTPORT": "59200"
       }
     },
     "RetroGamingWebAPI": {
@@ -26,9 +27,11 @@
       "launchBrowser": true,
       "launchUrl": "api/buggy",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "ASPNETCORE_URLS": "https://localhost:5000/;http://localhost:5001/;http://localhost:5002/",
+        "ASPNETCORE_MANAGEMENTPORT": "5002"
       },
-      "applicationUrl": "https://localhost:5003;http://localhost:5002"
+      "applicationUrl": "https://localhost:5000;http://localhost:5001"
     },
     "Docker": {
       "commandName": "Docker",

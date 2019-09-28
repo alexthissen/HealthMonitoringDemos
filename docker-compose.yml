@@ -10,10 +10,10 @@ services:
   healthcheckui:
     image: xabarilcoding/healthchecksui:latest
     environment:
-      - HealthChecks-UI:HealthChecks:0:Name=Readiness checks
-      - HealthChecks-UI:HealthChecks:0:Uri=http://retrogamingwebapi/health/ready
-      - HealthChecks-UI:HealthChecks:1:Name=Liveliness checks
-      - HealthChecks-UI:HealthChecks:1:Uri=http://retrogamingwebapi/health/lively
+      - HealthChecksUI:HealthChecks:0:Name=Readiness checks
+      - HealthChecksUI:HealthChecks:0:Uri=http://retrogamingwebapi/health/ready
+      - HealthChecksUI:HealthChecks:1:Name=Liveliness checks
+      - HealthChecksUI:HealthChecks:1:Uri=http://retrogamingwebapi/health/lively
     ports:
       - 5000:80
   
@@ -54,7 +54,7 @@ services:
       - GF_SMTP_SKIP_VERIFY=true
       - GF_EXTERNAL_IMAGE_STORAGE_PROVIDER=azure_blob
       - GF_EXTERNAL_IMAGE_STORAGE_AZURE_BLOB_ACCOUNT_NAME=grafanaslacknotification
-      - GF_EXTERNAL_IMAGE_STORAGE_AZURE_BLOB_ACCOUNT_KEY=1E9bY25cXSPts2dB39r4DsUAwrPjundpZUuNJu0vx9rUDJ/HIZaAPSEKGhCyBowAK0hJO1BOtGFGqcuSr2TVcA==
+      - GF_EXTERNAL_IMAGE_STORAGE_AZURE_BLOB_ACCOUNT_KEY=C3SLdvQAe+gXxho0dg1DVsbi3KdzDM1YFCD4fUbX7HS3oKOfpCO02ejKUk5Og5y611PdG6qCTiXb4HsUGNlqCQ==
       - GF_EXTERNAL_IMAGE_STORAGE_AZURE_BLOB_CONTAINER_NAME=alerts
     depends_on:
       - prometheus
