@@ -121,19 +121,6 @@ namespace RetroGamingWebAPI
 
         public void ConfigureProduction(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            app.UseHealthChecks("/health/ready", 80,
-                new HealthCheckOptions()
-                {
-                    Predicate = reg => reg.Tags.Contains("ready"),
-                    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
-                });
-            app.UseHealthChecks("/health/lively", 80,
-                new HealthCheckOptions()
-                {
-                    Predicate = _ => true,
-                    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
-                });
-
             //app.UseHttpsRedirection();
             app.UseWhen(
                 ctx => ctx.User.Identity.IsAuthenticated,
@@ -143,13 +130,21 @@ namespace RetroGamingWebAPI
             app.UseAuthorization();
             app.UseEndpoints(endpoints =>
             {
-                //endpoints.MapHealthChecks("/health/ready",
-                //    new HealthCheckOptions()
-                //    {
-                //        Predicate = reg => reg.Tags.Contains("ready"),
-                //        ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
-                //    })
-                //.RequireHost($"*:{Configuration["ManagementPort"]}");
+                endpoints.MapHealthChecks("/health/ready",
+                    new HealthCheckOptions()
+                    {
+                        Predicate = reg => reg.Tags.Contains("ready"),
+                        ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+                    })
+                .RequireHost($"*:{Configuration["ManagementPort"]}");
+
+                endpoints.MapHealthChecks("/health/lively",
+                    new HealthCheckOptions()
+                    {
+                        Predicate = _ => true,
+                        ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+                    })
+                .RequireHost($"*:{Configuration["ManagementPort"]}");
 
                 endpoints.MapControllers();
             });
