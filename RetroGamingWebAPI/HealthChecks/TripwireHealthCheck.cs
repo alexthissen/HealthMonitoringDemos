@@ -18,7 +18,7 @@ namespace RetroGamingWebAPI.HealthChecks
 
         public Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default(CancellationToken))
         {
-            switch (trippedCount)
+            switch (trippedCount % 3)
             {
                 case 2:
                     return Task.FromResult(HealthCheckResult.Unhealthy("Boom!"));
