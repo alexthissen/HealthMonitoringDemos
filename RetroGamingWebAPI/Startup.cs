@@ -65,8 +65,10 @@ namespace RetroGamingWebAPI
 
             services
                 .AddHealthChecks()
+                
                 .AddApplicationInsightsPublisher(key)
                 .AddPrometheusGatewayPublisher("http://pushgateway:9091/metrics", "pushgateway")
+                
                 .AddCheck<CircuitBreakerHealthCheck>("circuitbreakers")
                 .AddCheck<ForcedHealthCheck>("forceable")
                 .AddCheck<SlowDependencyHealthCheck>("slow", tags: new string[] { "ready" })

@@ -9,6 +9,7 @@ Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-co
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{E6A9F0C0-CEFE-4511-A4AB-22B575CC7F49}"
 	ProjectSection(SolutionItems) = preProject
+		dashboard.yaml = dashboard.yaml
 		dependencies.yml = dependencies.yml
 		prometheus.yml = prometheus.yml
 		RetroGaming-k8s.yaml = RetroGaming-k8s.yaml
