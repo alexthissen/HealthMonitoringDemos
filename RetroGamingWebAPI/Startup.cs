@@ -63,6 +63,13 @@ namespace RetroGamingWebAPI
             services.AddSingleton<IRandomHealthCheckResultGenerator, TimeBasedRandomHealthCheckResultGenerator>();
             services.AddSingleton<RandomHealthCheck>();
 
+            services.Configure<HealthCheckPublisherOptions>(options =>
+            {
+                options.Delay = TimeSpan.FromSeconds(2);
+                options.Timeout = TimeSpan.FromSeconds(10);
+                //options.Predicate = check => check.Tags.Contains("ready");
+            });
+
             services
                 .AddHealthChecks()
                 
