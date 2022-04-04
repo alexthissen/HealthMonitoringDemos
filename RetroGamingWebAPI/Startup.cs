@@ -1,23 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Net;
 using System.Net.Http;
-using System.Threading.Tasks;
 using HealthChecks.UI.Client;
-using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using Polly;
 using Polly.CircuitBreaker;
 using Polly.Registry;
@@ -71,8 +62,7 @@ namespace RetroGamingWebAPI
             });
 
             services
-                .AddHealthChecks()
-                
+                .AddHealthChecks()                
                 .AddApplicationInsightsPublisher(key)
                 .AddPrometheusGatewayPublisher("http://pushgateway:9091/metrics", "pushgateway")
                 
@@ -85,11 +75,11 @@ namespace RetroGamingWebAPI
                 options.Delay = TimeSpan.FromSeconds(20);
                 });
 
-            services.AddHealthChecksUI();
+            services.AddHealthChecksUI()
+                .AddSqliteStorage($"Data Source=sqlite.db");
 
             services.AddMvc()
-                .AddNewtonsoftJson()
-                .SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
+                .AddNewtonsoftJson();
         }
         
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
