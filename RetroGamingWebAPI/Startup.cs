@@ -129,6 +129,13 @@ namespace RetroGamingWebAPI
             app.UseAuthorization();
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapHealthChecks("/health",
+                    new HealthCheckOptions()
+                    {
+                        Predicate = reg => reg.Tags.Contains("ready"),
+                        ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+                    });
+
                 endpoints.MapHealthChecks("/health/ready",
                     new HealthCheckOptions()
                     {

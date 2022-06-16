@@ -8,6 +8,8 @@ spec:
   scope: Namespaced #The UI will be created at specified namespace (demo) and will watch healthchecks services in demo namespace only
   #scope: Cluster The UI will be created at specified namespace (demo) but will watch healthcheck services across all namespaces
   servicesLabel: HealthChecks
+  
+  portNumber: 8180
   serviceType: LoadBalancer
   stylesheetContent: >
     :root {    
@@ -15,9 +17,9 @@ spec:
       --secondaryColor: #f4f4f4;  
       --bgMenuActive: #e1b015;
       --bgButton: #e1b015;
-      --logoImageUrl: url('https://upload.wikimedia.org/wikipedia/commons/thumb/e/eb/WoW_icon.svg/1200px-WoW_icon.svg.png');
+      --logoImageUrl: url('https://vslive.com/~/media/ECG/VSLive/2022/austin/design/infobox.ashx');
       --bgAside: var(--primaryColor);   
     }
-  serviceAnnotations:
-    - name: service.beta.kubernetes.io/azure-load-balancer-internal
-      value: "true"
+  #serviceAnnotations:
+  #  - name: service.beta.kubernetes.io/azure-load-balancer-internal
+  #    value: "true"

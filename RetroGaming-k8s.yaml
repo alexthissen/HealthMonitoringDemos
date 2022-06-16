@@ -6,6 +6,32 @@ metadata:
     version: dev
     product: RetroGaming
 ---
+apiVersion: "aspnetcore.ui/v1"
+kind: HealthCheck
+metadata:
+  name: healthchecks-ui
+  namespace: monitoringdemo
+spec:
+  name: healthchecks-ui
+  scope: Namespaced #The UI will be created at specified namespace (demo) and will watch healthchecks services in demo namespace only
+  #scope: Cluster The UI will be created at specified namespace (demo) but will watch healthcheck services across all namespaces
+  servicesLabel: HealthChecks
+  
+  portNumber: 8180
+  serviceType: LoadBalancer
+  stylesheetContent: >
+    :root {    
+      --primaryColor: #2a3950;
+      --secondaryColor: #f4f4f4;  
+      --bgMenuActive: #e1b015;
+      --bgButton: #e1b015;
+      --logoImageUrl: url('https://vslive.com/~/media/ECG/VSLive/2022/austin/design/infobox.ashx');
+      --bgAside: var(--primaryColor);   
+    }
+  #serviceAnnotations:
+  #  - name: service.beta.kubernetes.io/azure-load-balancer-internal
+  #    value: "true"
+---
 apiVersion: v1
 kind: Service
 metadata:
@@ -14,19 +40,25 @@ metadata:
   labels:
     version: dev
     product: RetroGaming
+    HealthChecks: enabled
+  annotations:
+    healthChecksPort: "8080"
+    healthChecksPath: /health/lively
 spec:
   selector:
     app: retrogamingwebapi
-  type: LoadBalancer
+  type: NodePort
   ports:
   - port: 80
     targetPort: 80
+    nodePort: 30000
     protocol: TCP
     name: http
-  - port: 443
-    targetPort: 443
+  - port: 8080
+    targetPort: 8080
+    nodePort: 30001
     protocol: TCP
-    name: https
+    name: health
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -52,7 +84,7 @@ spec:
       containers:
       - name: retrogamingwebapi
         terminationMessagePath: "/tmp/retrogamingwebapi-log"
-        image: retrogamingwebapi:v2
+        image: retrogamingwebapi:v4
         imagePullPolicy: Never
         readinessProbe:
           httpGet:
