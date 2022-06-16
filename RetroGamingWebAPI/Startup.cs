@@ -65,7 +65,7 @@ namespace RetroGamingWebAPI
                 .AddHealthChecks()                
                 .AddApplicationInsightsPublisher(key)
                 .AddPrometheusGatewayPublisher("http://pushgateway:9091/metrics", "pushgateway")
-                
+                .AddProcessAllocatedMemoryHealthCheck(maximumMegabytesAllocated: 50)
                 .AddCheck<CircuitBreakerHealthCheck>("circuitbreakers")
                 .AddCheck<ForcedHealthCheck>("forceable")
                 .AddCheck<SlowDependencyHealthCheck>("slow", tags: new string[] { "ready" })
@@ -73,7 +73,7 @@ namespace RetroGamingWebAPI
 
             services.Configure<HealthCheckPublisherOptions>(options => {
                 options.Delay = TimeSpan.FromSeconds(20);
-                });
+            });
 
             services.AddHealthChecksUI()
                 .AddSqliteStorage($"Data Source=sqlite.db");
@@ -95,7 +95,7 @@ namespace RetroGamingWebAPI
 
             app.UseHttpsRedirection();
             app.UseRouting();
-            app.UseAuthorization();
+            app.UseAuthorization();app.UseHealthChecksPrometheusExporter()
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapHealthChecks("/ping", new HealthCheckOptions() { Predicate = _ => false });

@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.28527.54
+# Visual Studio Version 17
+VisualStudioVersion = 17.2.32519.379
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RetroGamingWebAPI", "RetroGamingWebAPI\RetroGamingWebAPI.csproj", "{13FA4F96-2DFB-4224-9E97-DE59D51BAFB0}"
 EndProject
@@ -10,9 +10,11 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{E6A9F0C0-CEFE-4511-A4AB-22B575CC7F49}"
 	ProjectSection(SolutionItems) = preProject
 		dashboard.yaml = dashboard.yaml
-		dependencies.yml = dependencies.yml
-		prometheus.yml = prometheus.yml
+		healthchecks-ui.yaml = healthchecks-ui.yaml
+		dependencies.yaml = dependencies.yaml
+		healthchecks-crd.yaml = healthchecks-crd.yaml
 		RetroGaming-k8s.yaml = RetroGaming-k8s.yaml
+		prometheus.yaml = prometheus.yaml
 	EndProjectSection
 EndProject
 Global

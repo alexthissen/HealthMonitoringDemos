@@ -1,0 +1,23 @@
+apiVersion: "aspnetcore.ui/v1"
+kind: HealthCheck
+metadata:
+  name: healthchecks-ui
+  namespace: monitoringdemo
+spec:
+  name: healthchecks-ui
+  scope: Namespaced #The UI will be created at specified namespace (demo) and will watch healthchecks services in demo namespace only
+  #scope: Cluster The UI will be created at specified namespace (demo) but will watch healthcheck services across all namespaces
+  servicesLabel: HealthChecks
+  serviceType: LoadBalancer
+  stylesheetContent: >
+    :root {    
+      --primaryColor: #2a3950;
+      --secondaryColor: #f4f4f4;  
+      --bgMenuActive: #e1b015;
+      --bgButton: #e1b015;
+      --logoImageUrl: url('https://upload.wikimedia.org/wikipedia/commons/thumb/e/eb/WoW_icon.svg/1200px-WoW_icon.svg.png');
+      --bgAside: var(--primaryColor);   
+    }
+  serviceAnnotations:
+    - name: service.beta.kubernetes.io/azure-load-balancer-internal
+      value: "true"

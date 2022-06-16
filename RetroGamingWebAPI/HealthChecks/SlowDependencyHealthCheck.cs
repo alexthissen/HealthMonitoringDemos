@@ -16,7 +16,7 @@ namespace RetroGamingWebAPI.HealthChecks
 
         public SlowDependencyHealthCheck()
         {
-            _task = Task.Delay(15 * 1000);
+            _task = Task.Delay(5 * 1000);
         }
 
         public Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default(CancellationToken))

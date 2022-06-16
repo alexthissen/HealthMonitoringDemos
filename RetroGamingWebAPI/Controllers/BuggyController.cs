@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
+using Microsoft.Extensions.Logging;
 using Polly;
 using Polly.CircuitBreaker;
 using Polly.Registry;
@@ -18,14 +20,18 @@ namespace RetroGamingWebAPI.Controllers
         private readonly IReadOnlyPolicyRegistry<string> registry;
         private readonly TripwireHealthCheck healthCheck;
         private readonly ForcedHealthCheck forcedHealthCheck;
+        private readonly ILogger<BuggyController> logger;
 
         public BuggyController(
             IReadOnlyPolicyRegistry<string> registry,
-            TripwireHealthCheck tripWireHealthCheck, ForcedHealthCheck forcedHealthCheck)
+            TripwireHealthCheck tripWireHealthCheck, 
+            ForcedHealthCheck forcedHealthCheck,
+            ILogger<BuggyController> logger)
         {
             this.registry = registry;
             this.healthCheck = tripWireHealthCheck;
             this.forcedHealthCheck = forcedHealthCheck;
+            this.logger = logger;
         }
 
         // GET api/buggy
@@ -58,6 +64,21 @@ namespace RetroGamingWebAPI.Controllers
         [HttpPut("{id}")]
         public void Put(int id, [FromBody] string value)
         {
+            if (registry.TryGet<CircuitBreakerPolicy>("DefaultBreaker", out var circuitBreaker))
+            {
+                try
+                {
+                    circuitBreaker.Execute(() => throw new HttpRequestException());
+                }
+                catch (BrokenCircuitException)
+                {
+                    logger?.LogInformation("Circuit breaker is open. Immediate failure");
+                }
+                catch (HttpRequestException)
+                {
+                    logger?.LogInformation("Normal HTTP Request failure being caught");
+                }
+            }
         }
 
         // DELETE api/buggy/5
