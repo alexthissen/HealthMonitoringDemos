@@ -95,7 +95,7 @@ namespace RetroGamingWebAPI
 
             app.UseHttpsRedirection();
             app.UseRouting();
-            app.UseAuthorization();app.UseHealthChecksPrometheusExporter()
+            app.UseAuthorization();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapHealthChecks("/ping", new HealthCheckOptions() { Predicate = _ => false });

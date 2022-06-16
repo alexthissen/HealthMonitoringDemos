@@ -43,20 +43,9 @@ namespace RetroGamingWebAPI.HealthChecks
 
     public class TotallyRandomHealthCheckResultGenerator : IRandomHealthCheckResultGenerator
     {
-        private readonly Random random;
-
-        public TotallyRandomHealthCheckResultGenerator()
-        {
-            RNGCryptoServiceProvider provider = new RNGCryptoServiceProvider();
-            byte[] byteArray = new byte[4];
-            provider.GetBytes(byteArray);
-            int seed = BitConverter.ToInt32(byteArray, 0);
-            random = new Random(seed);
-        }
-
         public HealthCheckResult GenerateRandomResult()
         {
-            int value = random.Next(100);
+            int value = RandomNumberGenerator.GetInt32(100);
             switch (value)
             {
                 case int n when (n >= 80):
