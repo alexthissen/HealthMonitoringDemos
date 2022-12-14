@@ -1,6 +1,11 @@
-﻿using System;
+﻿#pragma warning disable CS0618 // Type or member is obsolete
+
+using System;
 using System.Data.SqlClient;
 using System.Net.Http;
+using Azure.Extensions.AspNetCore.Configuration.Secrets;
+using Azure.Identity;
+using Azure.Security.KeyVault.Secrets;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
@@ -61,15 +66,33 @@ namespace RetroGamingWebAPI
                 //options.Predicate = check => check.Tags.Contains("ready");
             });
 
-            services
-                .AddHealthChecks()                
+            IHealthChecksBuilder healthChecks = services.AddHealthChecks();
+
+            healthChecks
                 .AddApplicationInsightsPublisher(key)
                 .AddPrometheusGatewayPublisher("http://pushgateway:9091/metrics", "pushgateway")
+                
                 .AddProcessAllocatedMemoryHealthCheck(maximumMegabytesAllocated: 50)
+
                 .AddCheck<CircuitBreakerHealthCheck>("circuitbreakers")
                 .AddCheck<ForcedHealthCheck>("forceable")
                 .AddCheck<SlowDependencyHealthCheck>("slow", tags: new string[] { "ready" })
                 .AddCheck<TripwireHealthCheck>("tripwire", failureStatus: HealthStatus.Degraded);
+
+            if (!String.IsNullOrEmpty(Configuration["KeyVaultName"])) {
+                Uri keyVaultUri = new Uri(Configuration["KeyVaultName"]);
+                ClientSecretCredential credential = new ClientSecretCredential(
+                    Configuration["KeyVaultTenantID"],
+                    Configuration["KeyVaultClientID"],
+                    Configuration["KeyVaultClientSecret"]);
+                healthChecks.AddAzureKeyVault(keyVaultUri, credential,
+                    options => {
+                        options
+                        .AddSecret("ApplicationInsights--InstrumentationKey")
+                        .AddKey("RetroKey");
+                    }, name: "keyvault"
+                );
+            }
 
             services.Configure<HealthCheckPublisherOptions>(options => {
                 options.Delay = TimeSpan.FromSeconds(20);
@@ -90,6 +113,7 @@ namespace RetroGamingWebAPI
                 app.UseDeveloperExceptionPage();
             }
 
+            // Old way, do not use anymore
             // app.UseHealthChecks("/health", options);
             // app.UseHealthChecksUI();
 
@@ -99,6 +123,7 @@ namespace RetroGamingWebAPI
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapHealthChecks("/ping", new HealthCheckOptions() { Predicate = _ => false });
+                endpoints.MapHealthChecks("/pong", new HealthCheckOptions() { Predicate = _ => true });
 
                 HealthCheckOptions options = new HealthCheckOptions();
                 options.ResultStatusCodes[HealthStatus.Degraded] = 418; // I'm a tea pot (or other HttpStatusCode enum)
@@ -129,10 +154,11 @@ namespace RetroGamingWebAPI
             app.UseAuthorization();
             app.UseEndpoints(endpoints =>
             {
+                // Demo purposes: expose endpoint
                 endpoints.MapHealthChecks("/health",
                     new HealthCheckOptions()
                     {
-                        Predicate = reg => reg.Tags.Contains("ready"),
+                        Predicate = _ => true,
                         ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
                     });
 
@@ -157,3 +183,38 @@ namespace RetroGamingWebAPI
         }
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#pragma warning restore CS0618 // Type or member is obsolete

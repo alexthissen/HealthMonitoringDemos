@@ -10,11 +10,11 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{E6A9F0C0-CEFE-4511-A4AB-22B575CC7F49}"
 	ProjectSection(SolutionItems) = preProject
 		dashboard.yaml = dashboard.yaml
-		healthchecks-ui.yaml = healthchecks-ui.yaml
 		dependencies.yaml = dependencies.yaml
 		healthchecks-crd.yaml = healthchecks-crd.yaml
+		healthchecks-ui.yaml = healthchecks-ui.yaml
+		prometheus\prometheus.yml = prometheus\prometheus.yml
 		RetroGaming-k8s.yaml = RetroGaming-k8s.yaml
-		prometheus.yaml = prometheus.yaml
 	EndProjectSection
 EndProject
 Global

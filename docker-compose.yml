@@ -20,7 +20,7 @@ services:
   prometheus:
     image: prom/prometheus
     volumes:
-      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./prometheus:/etc/prometheus/
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
     ports:
@@ -28,7 +28,6 @@ services:
 
   pushgateway:
     image: prom/pushgateway
-    container_name: pushgateway
     restart: unless-stopped
     ports:
       - 9091:9091
@@ -36,7 +35,6 @@ services:
       org.label-schema.group: "monitoring"
 
   maildev:
-    container_name: "smtpserver"
     image: "maildev/maildev:2.0.5" # https://hub.docker.com/r/maildev/maildev
     ports:
       - "1025"

@@ -1,13 +1,11 @@
 version: '3.4'
 
 services:
-  mysql:
-    image: mysql
+  sql.data:
+    image: mcr.microsoft.com/mssql/server:2019-latest
     environment:
-      - MYSQL_ROOT_PASSWORD=Pass@word1
+      - SA_PASSWORD=Pass@word
+      - MSSQL_PID=Developer
+      - ACCEPT_EULA=Y
     ports:
-      - 3306:3306
-  rabbitmq:
-    image: rabbitmq
-    ports:
-      - 5672:5672
+      - "1433"

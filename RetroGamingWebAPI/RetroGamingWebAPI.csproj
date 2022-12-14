@@ -13,7 +13,8 @@
 
   <ItemGroup>
     <PackageReference Include="AspNetCore.HealthChecks.OpenIdConnectServer" Version="6.0.2" />
-    <PackageReference Include="AspNetCore.HealthChecks.Prometheus.Metrics" Version="6.0.2" />
+	<PackageReference Include="AspNetCore.HealthChecks.AzureKeyVault" Version="6.0.2" />
+	<PackageReference Include="AspNetCore.HealthChecks.Prometheus.Metrics" Version="6.0.2" />
     <PackageReference Include="AspNetcore.HealthChecks.Publisher.ApplicationInsights" Version="6.0.2" />
     <PackageReference Include="AspNetCore.HealthChecks.Publisher.Prometheus" Version="6.0.2" />
     <PackageReference Include="AspNetCore.HealthChecks.Rabbitmq" Version="6.0.2" />
