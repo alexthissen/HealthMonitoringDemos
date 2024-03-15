@@ -1,36 +1,34 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <UserSecretsId>9f7d9a51-98b2-4bea-aeb9-ec214556431e</UserSecretsId>
     <ApplicationInsightsResourceId>/subscriptions/ad184f13-1651-4b33-98bc-35ee7e41deec/resourcegroups/Default-ApplicationInsights-EastUS/providers/microsoft.insights/components/RetroGamingWebAPI</ApplicationInsightsResourceId>
     <ApplicationInsightsAnnotationResourceId>/subscriptions/ad184f13-1651-4b33-98bc-35ee7e41deec/resourcegroups/Default-ApplicationInsights-EastUS/providers/microsoft.insights/components/RetroGamingWebAPI</ApplicationInsightsAnnotationResourceId>
     <DockerComposeProjectPath>..\docker-compose.dcproj</DockerComposeProjectPath>
-    <LangVersion>7.3</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AspNetCore.HealthChecks.OpenIdConnectServer" Version="6.0.2" />
-	<PackageReference Include="AspNetCore.HealthChecks.AzureKeyVault" Version="6.0.2" />
-	<PackageReference Include="AspNetCore.HealthChecks.Prometheus.Metrics" Version="6.0.2" />
-    <PackageReference Include="AspNetcore.HealthChecks.Publisher.ApplicationInsights" Version="6.0.2" />
-    <PackageReference Include="AspNetCore.HealthChecks.Publisher.Prometheus" Version="6.0.2" />
-    <PackageReference Include="AspNetCore.HealthChecks.Rabbitmq" Version="6.0.2" />
-    <PackageReference Include="AspNetCore.HealthChecks.SqlServer" Version="6.0.2" />
-    <PackageReference Include="AspNetCore.HealthChecks.System" Version="6.0.5" />
-    <PackageReference Include="AspNetCore.HealthChecks.UI" Version="6.0.4" />
-    <PackageReference Include="AspNetCore.HealthChecks.UI.Client" Version="6.0.4" />
-    <PackageReference Include="AspNetCore.HealthChecks.UI.SQLite.Storage" Version="6.0.4" />
-    <PackageReference Include="Azure.Extensions.AspNetCore.Configuration.Secrets" Version="1.2.2" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.6" />
-    <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.20.0" />
-    <PackageReference Include="Microsoft.Extensions.Http.Polly" Version="6.0.6" />
-    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.15.1" />
-    <PackageReference Include="Orneholm.ApplicationInsights.HealthChecks" Version="1.0.0" />
-    <PackageReference Include="Polly" Version="7.2.3" />
-    <PackageReference Include="System.Data.SqlClient" Version="4.8.3" />
+    <PackageReference Include="AspNetCore.HealthChecks.OpenIdConnectServer" Version="8.0.0" />
+	<PackageReference Include="AspNetCore.HealthChecks.AzureKeyVault" Version="8.0.0" />
+	<PackageReference Include="AspNetCore.HealthChecks.Prometheus.Metrics" Version="8.0.0" />
+    <PackageReference Include="AspNetcore.HealthChecks.Publisher.ApplicationInsights" Version="8.0.0" />
+    <PackageReference Include="AspNetCore.HealthChecks.Publisher.Prometheus" Version="8.0.0" />
+    <PackageReference Include="AspNetCore.HealthChecks.Rabbitmq" Version="8.0.0" />
+    <PackageReference Include="AspNetCore.HealthChecks.SqlServer" Version="8.0.0" />
+    <PackageReference Include="AspNetCore.HealthChecks.System" Version="8.0.0" />
+    <PackageReference Include="AspNetCore.HealthChecks.UI" Version="8.0.0" />
+    <PackageReference Include="AspNetCore.HealthChecks.UI.Client" Version="8.0.0" />
+    <PackageReference Include="AspNetCore.HealthChecks.UI.SQLite.Storage" Version="8.0.0" />
+    <PackageReference Include="Azure.Extensions.AspNetCore.Configuration.Secrets" Version="1.3.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="8.0.3" />
+    <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.22.0" />
+    <PackageReference Include="Microsoft.Extensions.Http.Polly" Version="8.0.3" />
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.19.6" />
+    <PackageReference Include="Polly" Version="8.3.1" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.8.6" />
   </ItemGroup>
 
   <ItemGroup>
