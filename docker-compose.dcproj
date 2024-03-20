@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿
 <Project ToolsVersion="15.0" Sdk="Microsoft.Docker.Sdk">
   <PropertyGroup Label="Globals">
     <ProjectVersion>2.1</ProjectVersion>
@@ -7,6 +7,7 @@
     <DockerLaunchAction>LaunchBrowser</DockerLaunchAction>
     <DockerServiceUrl>http://localhost:59200/api/buggy</DockerServiceUrl>
     <DockerServiceName>retrogamingwebapi</DockerServiceName>
+    <UserSecretsId>666d5886-0a06-458c-83ec-12f1bd6587be</UserSecretsId>
   </PropertyGroup>
   <ItemGroup>
     <None Include="docker-compose.override.yml">

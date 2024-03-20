@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: monitoringdemo
+  name: healthdemo
   labels:
     version: dev
     product: RetroGaming
@@ -9,7 +9,7 @@ metadata:
 apiVersion: v1
 kind: Service
 metadata:
-  namespace: monitoringdemo
+  namespace: healthdemo
   name: svc-retrogamingwebapi
   labels:
     version: dev
@@ -37,7 +37,7 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  namespace: monitoringdemo
+  namespace: healthdemo
   name: dep-retrogamingwebapi
 spec:
   selector:
@@ -58,7 +58,7 @@ spec:
       containers:
       - name: retrogamingwebapi
         terminationMessagePath: "/tmp/retrogamingwebapi-log"
-        image: retrogamingwebapi:v10
+        image: retrogamingwebapi:latest
         imagePullPolicy: Never
         readinessProbe:
           httpGet:

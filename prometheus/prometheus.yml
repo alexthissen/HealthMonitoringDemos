@@ -15,12 +15,13 @@ scrape_configs:
       - targets: ['node-exporter:9100']
   - job_name: 'aspnetcorewebapi'
     scrape_interval: 5s
+    metrics_path: /healthmetrics
     static_configs:
       - targets: ['retrogamingwebapi']
-  - job_name: 'pushgateway'
-    scrape_interval: 5s
-    static_configs:
-      - targets: ['pushgateway:9091']
+  # - job_name: 'pushgateway'
+  #   scrape_interval: 5s
+  #   static_configs:
+  #     - targets: ['pushgateway:9091']
   - job_name: 'grafana'
     scrape_interval: 5s
     static_configs:

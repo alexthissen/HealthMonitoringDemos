@@ -17,18 +17,18 @@ namespace RetroGamingWebAPI.Controllers
     [ApiController]
     public class BuggyController : ControllerBase
     {
-        private readonly IReadOnlyPolicyRegistry<string> registry;
+        //private readonly IReadOnlyPolicyRegistry<string> registry;
         private readonly TripwireHealthCheck healthCheck;
         private readonly ForcedHealthCheck forcedHealthCheck;
         private readonly ILogger<BuggyController> logger;
 
         public BuggyController(
-            IReadOnlyPolicyRegistry<string> registry,
-            TripwireHealthCheck tripWireHealthCheck, 
+            //IReadOnlyPolicyRegistry<string> registry,
+            TripwireHealthCheck tripWireHealthCheck,
             ForcedHealthCheck forcedHealthCheck,
             ILogger<BuggyController> logger)
         {
-            this.registry = registry;
+            //this.registry = registry;
             this.healthCheck = tripWireHealthCheck;
             this.forcedHealthCheck = forcedHealthCheck;
             this.logger = logger;
@@ -46,8 +46,8 @@ namespace RetroGamingWebAPI.Controllers
         public ActionResult<int> Get(int id)
         {
             // For demo purposes, a GET will trip circuit breaker
-            CircuitBreakerPolicy breaker = registry.Get<CircuitBreakerPolicy>("DefaultBreaker");
-            breaker.Isolate();
+            // CircuitBreakerPolicy breaker = registry.Get<CircuitBreakerPolicy>("DefaultBreaker");
+            // breaker.Isolate();
 
             // And trip another health check. Very buggy GET method :)
             return healthCheck.Trip();
@@ -64,21 +64,21 @@ namespace RetroGamingWebAPI.Controllers
         [HttpPut("{id}")]
         public void Put(int id, [FromBody] string value)
         {
-            if (registry.TryGet<CircuitBreakerPolicy>("DefaultBreaker", out var circuitBreaker))
-            {
-                try
-                {
-                    circuitBreaker.Execute(() => throw new HttpRequestException());
-                }
-                catch (BrokenCircuitException)
-                {
-                    logger?.LogInformation("Circuit breaker is open. Immediate failure");
-                }
-                catch (HttpRequestException)
-                {
-                    logger?.LogInformation("Normal HTTP Request failure being caught");
-                }
-            }
+            // if (registry.TryGet<CircuitBreakerPolicy>("DefaultBreaker", out var circuitBreaker))
+            // {
+            //     try
+            //     {
+            //         circuitBreaker.Execute(() => throw new HttpRequestException());
+            //     }
+            //     catch (BrokenCircuitException)
+            //     {
+            //         logger?.LogInformation("Circuit breaker is open. Immediate failure");
+            //     }
+            //     catch (HttpRequestException)
+            //     {
+            //         logger?.LogInformation("Normal HTTP Request failure being caught");
+            //     }
+            // }
         }
 
         // DELETE api/buggy/5
