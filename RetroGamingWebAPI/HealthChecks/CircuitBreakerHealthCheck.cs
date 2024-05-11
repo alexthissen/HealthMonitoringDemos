@@ -2,10 +2,7 @@
 using Microsoft.Extensions.Options;
 using Polly.CircuitBreaker;
 using Polly.Registry;
-using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 

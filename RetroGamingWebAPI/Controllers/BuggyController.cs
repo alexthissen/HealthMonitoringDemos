@@ -1,14 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Logging;
-using Polly;
-using Polly.CircuitBreaker;
-using Polly.Registry;
 using RetroGamingWebAPI.HealthChecks;
 
 namespace RetroGamingWebAPI.Controllers

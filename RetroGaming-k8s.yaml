@@ -58,7 +58,7 @@ spec:
       containers:
       - name: retrogamingwebapi
         terminationMessagePath: "/tmp/retrogamingwebapi-log"
-        image: retrogamingwebapi:latest
+        image: retrogamingwebapi:v1
         imagePullPolicy: Never
         readinessProbe:
           httpGet:

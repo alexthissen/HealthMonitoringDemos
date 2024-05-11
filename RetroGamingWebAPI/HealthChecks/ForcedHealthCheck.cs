@@ -1,7 +1,6 @@
 ﻿using Microsoft.Extensions.Diagnostics.HealthChecks;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -19,7 +18,7 @@ namespace RetroGamingWebAPI.HealthChecks
         public void Force(string status, string node)
         {
             forcedResult = new HealthCheckResult(
-                Enum.Parse<HealthStatus>(status, true), 
+                Enum.Parse<HealthStatus>(status, true),
                 $"Forced at {DateTime.Now.ToShortTimeString()}",
                 null, new Dictionary<string, object>
                     {

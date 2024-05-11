@@ -33,7 +33,6 @@ services:
       - "1080:1080"
 
   seq:
-#    container_name: seq
     image: datalust/seq:latest
     environment:
       - ACCEPT_EULA=Y
