@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <IsAspireHost>true</IsAspireHost>
+    <UserSecretsId>b4b6087b-e976-4759-9c17-9bf4c473f9bd</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Aspire.Hosting.AppHost" Version="8.0.0-preview.7.24251.11" />
+    <PackageReference Include="Aspire.Hosting.Seq" Version="8.0.0-preview.7.24251.11" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\RetroGamingWebAPI\RetroGamingWebAPI.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -1,4 +1,4 @@
-﻿using System.Net;
+using System.Net;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
@@ -8,6 +8,8 @@ using Microsoft.Extensions.Hosting;
 using RetroGamingWebAPI.HealthChecks;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder();
+
+builder.AddServiceDefaults();
 
 // Registering health check lifetimes. Singleton is preferred
 builder.Services.AddSingleton<TripwireHealthCheck>();
@@ -27,7 +29,7 @@ healthChecks
     .AddProcessAllocatedMemoryHealthCheck(maximumMegabytesAllocated: 50)
 
     .AddCheck<ForcedHealthCheck>("forceable")
-    .AddCheck<SlowDependencyHealthCheck>("slow", tags: new string[] { "ready" })
+    .AddCheck<SlowDependencyHealthCheck>("slow", tags: ["ready"])
     .AddCheck<TripwireHealthCheck>("tripwire", failureStatus: HealthStatus.Degraded);
 
 if (builder.Environment.IsDevelopment())
@@ -40,6 +42,8 @@ if (builder.Environment.IsDevelopment())
 builder.Services.AddMvc().AddNewtonsoftJson();
 
 var app = builder.Build();
+
+app.MapDefaultEndpoints();
 
 app.UseRouting();
 app.UseAuthorization();
