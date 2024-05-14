@@ -19,19 +19,30 @@
       "launchUrl": "api/buggy",
       "environmentVariables": {
         "ASPNETCORE_MANAGEMENTPORT": "59200",
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Production1"
       }
     },
-    "RetroGamingWebAPI": {
+    "InnerLoop": {
       "commandName": "Project",
       "launchBrowser": true,
       "launchUrl": "api/buggy",
       "environmentVariables": {
-        "ASPNETCORE_MANAGEMENTPORT": "5002",
         //"ASPNETCORE_URLS": "https://localhost:5003/;http://localhost:5001/;http://localhost:5002/",
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
-      "applicationUrl": "https://localhost:5003;http://localhost:5001"
+      "applicationUrl": "http://localhost:5002;https://localhost:5001;http://localhost:5000"
+    },
+    "Production": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "launchUrl": "api/buggy",
+      "environmentVariables": {
+        "ASPNETCORE_MANAGEMENTPORT": "8080",
+        //"ASPNETCORE_URLS": "https://localhost:8080/;https://localhost:5001/;http://localhost:5000/",
+        //"ASPIRE_ALLOW_UNSECURED_TRANSPORT": true,
+        "ASPNETCORE_ENVIRONMENT": "Production"
+      },
+      "applicationUrl": "https://localhost;http://localhost;http://localhost:8080"
     },
     "Docker": {
       "commandName": "Docker",
