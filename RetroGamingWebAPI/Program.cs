@@ -39,6 +39,8 @@ if (builder.Environment.IsDevelopment())
         .AddInMemoryStorage();
 }
 
+builder.AddNpgsqlDataSource("postgres");
+
 builder.Services.AddMvc().AddNewtonsoftJson();
 
 var app = builder.Build();

@@ -8,21 +8,12 @@ scrape_configs:
   - job_name: 'prometheus'
     scrape_interval: 5s
     static_configs:
-      - targets: ['prometheus:9090']
-  - job_name: 'node-exporter'
-    scrape_interval: 5s
-    static_configs:
-      - targets: ['node-exporter:9100']
+      - targets: ['localhost:9090']
   - job_name: 'aspnetcorewebapi'
     scrape_interval: 5s
     metrics_path: /healthmetrics
+    scheme: https
+    tls_config:
+      insecure_skip_verify: true
     static_configs:
-      - targets: ['retrogamingwebapi']
-  # - job_name: 'pushgateway'
-  #   scrape_interval: 5s
-  #   static_configs:
-  #     - targets: ['pushgateway:9091']
-  - job_name: 'grafana'
-    scrape_interval: 5s
-    static_configs:
-      - targets: ['grafana:3000']
+      - targets: ['host.docker.internal:443']
