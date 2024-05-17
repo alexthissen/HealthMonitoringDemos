@@ -27,11 +27,8 @@ builder.AddContainer("prometheus", "prom/prometheus")
 
 builder
     .AddProject<Projects.RetroGamingWebAPI>("retrogamingwebapi")
-        .WithEnvironment("HEALTH_INITIAL_STATE", "Degraded")
-        .WithReplicas(1)
-    //.WithHttpEndpoint(port: 5000, name: "retrogamingwebapi")
-    //.WithHttpsEndpoint(port: 5001, name: "retrogamingwebapi-secure")
-    //.WithHttpEndpoint(port: 5002, name: "management")
+    .WithEnvironment("HEALTH_INITIAL_STATE", "Healthy")
+    .WithReplicas(1)
     .WithReference(seq)
     .WithReference(postgres);
 

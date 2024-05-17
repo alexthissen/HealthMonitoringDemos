@@ -1,15 +1,34 @@
+using System.Configuration;
+using System;
 using System.Net;
+using System.Net.Http;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Hosting;
+using Polly.CircuitBreaker;
+using Polly.Registry;
 using RetroGamingWebAPI.HealthChecks;
+using Polly;
+using Microsoft.EntityFrameworkCore;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder();
 
 builder.AddServiceDefaults();
+
+CircuitBreakerPolicy breaker = Policy
+                .Handle<HttpRequestException>()
+                .CircuitBreaker(
+                    exceptionsAllowedBeforeBreaking: 2,
+                    durationOfBreak: TimeSpan.FromMinutes(1)
+            );
+PolicyRegistry registry = new PolicyRegistry() {
+                { "DefaultBreaker", breaker }
+            };
+builder.Services.Configure<CircuitBreakerHealthCheckOptions>(builder.Configuration.GetSection("CircuitBreakerHealthCheckOptions"));
+builder.Services.AddSingleton<IReadOnlyPolicyRegistry<string>>(registry);
 
 // Registering health check lifetimes. Singleton is preferred
 builder.Services.AddSingleton<TripwireHealthCheck>();
@@ -28,6 +47,7 @@ healthChecks
 
     .AddProcessAllocatedMemoryHealthCheck(maximumMegabytesAllocated: 50)
 
+    .AddCheck<CircuitBreakerHealthCheck>("circuitbreakers")
     .AddCheck<ForcedHealthCheck>("forceable")
     .AddCheck<SlowDependencyHealthCheck>("slow", tags: ["ready"])
     .AddCheck<TripwireHealthCheck>("tripwire", failureStatus: HealthStatus.Degraded);
@@ -96,5 +116,4 @@ else
 }
 
 app.MapControllers();
-
 app.Run();

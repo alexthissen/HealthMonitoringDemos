@@ -9,16 +9,16 @@ namespace RetroGamingWebAPI.HealthChecks
     {
         public static readonly string HealthCheckName = "slow_dependency";
 
-        private readonly Task _task;
+        private readonly Task task;
 
         public SlowDependencyHealthCheck()
         {
-            _task = Task.Delay(5 * 1000);
+            task = Task.Delay(5 * 1000);
         }
 
         public Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default(CancellationToken))
         {
-            if (_task.IsCompleted)
+            if (task.IsCompleted)
             {
                 return Task.FromResult(HealthCheckResult.Healthy("Dependency is ready"));
             }

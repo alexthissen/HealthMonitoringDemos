@@ -10,21 +10,6 @@
 		<ContainerRepository>healthmonitoringdemo</ContainerRepository>
 		<ContainerImageTags>latest;newest</ContainerImageTags>
 		<ContainerBaseImage>mcr.microsoft.com/dotnet/aspnet:8.0</ContainerBaseImage>
-		<!--<ContainerRegistryName>retrogamingwebapi</ContainerRegistryName>
-		<ContainerRegistryServer>retrogamingwebapi.azurecr.io</ContainerRegistryServer>
-		<ContainerRegistryType>AzureContainerRegistry</ContainerRegistryType>
-		<ContainerRegistryUser>retrogamingwebapi</ContainerRegistryUser>
-		<ContainerRegistryPassword>$(ContainerRegistryPassword)</ContainerRegistryPassword>
-		<ContainerRegistryEmail></ContainerRegistryEmail>
-		<ContainerRegistryToken></ContainerRegistryToken>
-		<ContainerRegistryTokenUsername></ContainerRegistryTokenUsername>
-		<ContainerRegistryTokenPassword></ContainerRegistryTokenPassword>
-		<ContainerRegistryTokenExpires>2022-12-31T23:59:59.9999999Z</ContainerRegistryTokenExpires>
-		<ContainerRegistryTokenExpiresIn>365</ContainerRegistryTokenExpiresIn>
-		<ContainerRegistryTokenExpiresInUnit>Days</ContainerRegistryTokenExpiresInUnit>
-		<ContainerRegistryTokenExpiresInValue>365</ContainerRegistryTokenExpiresInValue>
-		<ContainerRegistryTokenExpiresInUnitValue>Days</ContainerRegistryTokenExpiresInUnitValue>-->
-		
 	</PropertyGroup>
 	<ItemGroup>
 		<ContainerPort Include="443" Type="tcp" />
